@@ -1,21 +1,18 @@
-#file '/etc/yum.repos.d/mongodb-org-3.6.repo' do
-#  content '[mongodb-org-3.6]
-#name=MongoDB Repository
-#baseurl=https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.6/x86_64/
-#gpgcheck=1
-#enabled=1
-#gpgkey=https://www.mongodb.org/static/pgp/server-3.6.asc
-#'
-#  source 'out.repo.erb'
-#end#
-
 package 'java-1.7.0-openjdk-devel'
 
-#service 'mongod' do
-#  action [:enable, :start]
-#end
+group 'tomcat'
 
-# Cookbook:: mongodb
-# Recipe:: default
-#
-# Copyright:: 2018, The Authors, All Rights Reserved.
+user 'tomcat' do 
+ manage_home false
+ shell '/bin/nologin'
+ group 'tomcat'
+ home '/opt/tomcat/'
+end
+
+remote_file 'apache-tomcat-8.0.50.tar.gz' do
+ source 'http://apache.cs.utah.edu/tomcat/tomcat-8/v8.0.50/bin/apache-tomcat-8.0.50.tar.gz'
+end
+
+
+execute 'mkdir /opt/tomcat'
+execute 'tar xvf apache-tomcat-8*tar.gz -C /opt/tomcat --strip-components=1'
